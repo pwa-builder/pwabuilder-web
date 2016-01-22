@@ -31,9 +31,25 @@
     "Windows"
   ],
   "dependencies": {
+    "q": "^1.4.1",
     "manifoldjs-lib": "git://github.com/manifoldjs/manifoldjs-lib.git"
   },
   "devDependencies": {
+    "blanket": "1.1.6",
+    "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-jshint": "^0.11.3",
+    "grunt-contrib-nodeunit": "^0.4.1",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-mocha-test": "^0.12.7",
+    "jshint-stylish": "^1.0.0",
+    "jshint-teamcity": "^1.0.6",
+    "load-grunt-tasks": "^1.0.0",
+    "mocha": "^2.1.0",
+    "mocha-teamcity-reporter": "0.0.4",
+    "should": "^5.0.1",
+    "time-grunt": "^1.0.0",
+    "travis-cov": "^0.2.5"
   },
   "bugs": {
     "url": "https://github.com/manifoldjs/manifoldjs-web/issues"
