@@ -52,6 +52,7 @@
     "travis-cov": "^0.2.5"
   },
   "scripts": {
+    "test": "grunt",
     "debug-tests": "mocha test/**/*.js --debug-brk"
   },
   "bugs": {
