@@ -51,6 +51,9 @@
     "time-grunt": "^1.0.0",
     "travis-cov": "^0.2.5"
   },
+  "scripts": {
+    "debug-tests": "mocha test/**/*.js --debug-brk"
+  },
   "bugs": {
     "url": "https://github.com/manifoldjs/manifoldjs-web/issues"
   },
