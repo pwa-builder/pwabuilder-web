@@ -1,7 +1,7 @@
 {
   "name": "manifoldjs-web",
-  "version": "0.0.1",
-  "description": "Manifoldjs Web platform",
+  "version": "0.1.0",
+  "description": "Manifoldjs Web Platform",
   "repository": {
     "type": "git",
     "url": "https://github.com/manifoldjs/manifoldjs-web.git"
@@ -32,7 +32,7 @@
   ],
   "dependencies": {
     "q": "^1.4.1",
-    "manifoldjs-lib": "git://github.com/manifoldjs/manifoldjs-lib.git"
+    "manifoldjs-lib": "^0.1.0"
   },
   "devDependencies": {
     "blanket": "1.1.6",
