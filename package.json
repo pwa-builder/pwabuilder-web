@@ -1,7 +1,7 @@
 {
-  "name": "manifoldjs-web",
-  "version": "0.2.0",
-  "description": "Manifoldjs Web Platform",
+  "name": "pwabuilder-web",
+  "version": "2.0.0-rc.0",
+  "description": "PWA Builder Web Platform",
   "repository": {
     "type": "git",
     "url": "https://github.com/manifoldjs/manifoldjs-web.git"
@@ -28,11 +28,13 @@
     "W3C",
     "Manifold",
     "ManifoldJS",
+    "PWA",
+    "pwabuilder",
     "Windows"
   ],
   "dependencies": {
     "q": "^1.4.1",
-    "manifoldjs-lib": "^1.1.0"
+    "pwabuilder-lib": "^2.0.0"
   },
   "devDependencies": {
     "blanket": "1.1.6",
