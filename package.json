@@ -1,6 +1,6 @@
 {
   "name": "pwabuilder-web",
-  "version": "2.0.0-rc.1",
+  "version": "2.0.0-rc.2",
   "description": "PWA Builder Web Platform",
   "repository": {
     "type": "git",
@@ -29,7 +29,7 @@
     "Manifold",
     "ManifoldJS",
     "PWA",
-    "pwabuilder",
+    "PWA Builder",
     "Windows"
   ],
   "dependencies": {
