@@ -1,18 +1,18 @@
-# manifoldjs-web
+# pwabuilder-web
 
-## ManifoldJS Web Platform
+## PWA Builder Web Platform
 
-Web platform module for [ManifoldJS](https://github.com/manifoldjs/ManifoldJS), a tool for creating hosted web applications based on a [W3C Web App manifest](http://www.w3.org/TR/appmanifest/).
+Web platform module for [PWA Builder](https://github.com/manifoldjs/ManifoldJS), a tool for creating hosted web applications based on a [W3C Web App manifest](http://www.w3.org/TR/appmanifest/).
 
 ## Installation
 
 ```
-npm install manifoldjs-web
+npm install pwabuilder-web
 ```
 In node.js:
 
 ```
-var platform = require('manifoldjs-web')
+var platform = require('pwabuilder-web')
 ```
 
 ## Documentation
@@ -20,7 +20,7 @@ To get started, visit our [wiki](https://github.com/manifoldjs/ManifoldJS/wiki).
 
 ## License
 
-> manifoldjs-web
+> pwabuilder-web
 
 > Copyright (c) Microsoft Corporation
 
