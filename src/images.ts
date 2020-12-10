@@ -4,7 +4,6 @@ import JSZip from "jszip";
 import Jimp from "jimp";
 import { getGeneratedIconZip } from "./imageGenerator";
 import { FastifyInstance } from "fastify";
-import * as appiconsetJson from "./assets/MacOSpwa/Assets.xcassets/AppIcon.appiconset/Contents.json";
 
 /*
   Handle Images
@@ -24,9 +23,6 @@ export async function handleImages(
 ): Promise<Array<Promise<OperationResult>>> {
   try {
     const operations: Array<Promise<OperationResult>> = [];
-
-    // Clear the two entries that require the correct pathing, add entries based on what is returned in the generated.
-    const appIconContents = { ...appiconsetJson };
 
     //each image needs to be copied into two places, a manifest changes and also json write changes in the assets folder
     const largestImgEntry = getLargestImgManifestEntry(manifest);
@@ -86,17 +82,6 @@ export async function handleImages(
         })()
       );
 
-      appIconContents.images
-        .map((entry, i) => {
-          if (entry.size === iconEntry.sizes) {
-            return i;
-          }
-        })
-        .filter((entry) => typeof entry === "number")
-        .forEach((index) => {
-          appIconContents.images[index as number].filename = iconName;
-        });
-
       manifest.icons.push({
         src: filePath,
         sizes: iconEntry.sizes,
@@ -104,11 +89,6 @@ export async function handleImages(
         purpose: "any",
       });
     }
-
-    zip.file(
-      "MacOSpwa/Assets.xcassets/AppIcon.appiconset/Contents.json",
-      JSON.stringify(appIconContents, undefined, 2)
-    );
 
     return operations;
   } catch (error) {
