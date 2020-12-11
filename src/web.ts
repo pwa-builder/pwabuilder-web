@@ -2,11 +2,7 @@ import { FastifyInstance } from "fastify";
 import JSZip from "jszip";
 import fetch from "node-fetch";
 import { handleImages } from "./images";
-import {
-  FilesAndEdit,
-  copyFiles,
-  copyFile,
-} from "./copy";
+import { FilesAndEdit, copyFiles, copyFile } from "./copy";
 import { webAppManifestSchema } from "./schema";
 import { serviceWorkerId, serviceWorkerService } from "./constants";
 
@@ -93,47 +89,57 @@ const filesAndEdits: FilesAndEdit = {
 };
 
 // Fetches service worker, if the service worker exists in the repo, skip this step.
-async function handleServiceWorker(zip: JSZip, manifest: WebAppManifest, hasServiceWorker = false): Promise<Array<OperationResult>> {
+async function handleServiceWorker(
+  zip: JSZip,
+  manifest: WebAppManifest,
+  hasServiceWorker = false
+): Promise<Array<OperationResult>> {
   try {
     const results: Array<OperationResult> = [];
     if (!hasServiceWorker) {
-      const response = await fetch(`${serviceWorkerService}?id=${serviceWorkerId}`, {
-        method: "GET"
-      });
-      const swZip = await new JSZip().loadAsync(await response.arrayBuffer())
+      const response = await fetch(
+        `${serviceWorkerService}?id=${serviceWorkerId}`,
+        {
+          method: "GET",
+        }
+      );
+      const swZip = await new JSZip().loadAsync(await response.arrayBuffer());
 
-      const fileList: Array<string> = []
+      const fileList: Array<string> = [];
       swZip.forEach((relPath) => fileList.push(relPath));
 
       for (const filePath of fileList) {
-        const contents = swZip.file(filePath)?.async("arraybuffer")
+        const contents = swZip.file(filePath)?.async("arraybuffer");
         if (contents) {
-          zip.file(filePath, await contents)
+          zip.file(filePath, await contents);
           results.push({
             filePath,
-            success: true
-          })
+            success: true,
+          });
         } else {
           // should be impossible scenario
           results.push({
             filePath,
             success: false,
             error: new Error("Failed to find item in service worker zip"),
-          })
+          });
         }
       }
     }
 
     return results;
   } catch (error) {
-    return [{
-      filePath: "serviceWorker.js",
-      success: false,
-      error,
-    }, {
-      filePath: "serviceWorker-register.js",
-      success: false,
-      error,
-    }];
+    return [
+      {
+        filePath: "serviceWorker.js",
+        success: false,
+        error,
+      },
+      {
+        filePath: "serviceWorker-register.js",
+        success: false,
+        error,
+      },
+    ];
   }
 }
