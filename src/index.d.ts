@@ -46,4 +46,5 @@ interface Unsupported {}
 
 interface WebQuery {
   siteUrl: string;
+  hasServiceWorker: boolean;
 }
