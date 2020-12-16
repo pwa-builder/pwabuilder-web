@@ -1,0 +1,24 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ v2 ]
+  pull_request:
+    branches: [ v2 ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag pwabuilder.azurecr.io/pwabuilder-web-platform:latest
+      
+    - name: Login
+      run: docker login pwabuilder.azurecr.io -u pwabuilder --password ${{secrets.azure}}
+      
+    - name: Push
+      run: docker push pwabuilder.azurecr.io/pwabuilder-web-platform:latest
