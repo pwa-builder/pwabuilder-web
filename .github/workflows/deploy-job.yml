@@ -19,10 +19,10 @@
 name: Deploy Job CI
 on:
     push:
-        branches: [ v2 ]
+        branches: [ V2 ]
 
     pull_request:
-        branches: [ v2 ]
+        branches: [ V2 ]
 
 jobs:
 
