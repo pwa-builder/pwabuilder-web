@@ -61,7 +61,7 @@ export async function handleImages(
       const icon = await iconP!;
       const iconName = `${iconEntry.sizes}.` + icon.getExtension();
       const iconMIME = icon.getMIME();
-      const filePath = `MacOSpwa/Assets.xcassets/${iconName}`;
+      const filePath = `images/${iconName}`;
 
       operations.push(
         (async () => {
