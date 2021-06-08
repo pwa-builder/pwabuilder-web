@@ -1,7 +1,7 @@
 import JSZip from "jszip";
 import Jimp from "jimp";
 import FormData from "form-data";
-import fetch from "node-fetch";
+import fetch from "got";
 import { FastifyInstance } from "fastify";
 
 export async function getGeneratedIconZip(
@@ -26,7 +26,7 @@ export async function getGeneratedIconZip(
       }
     );
 
-    return JSZip.loadAsync(await response.buffer());
+    return JSZip.loadAsync(response.read());
   } catch (err) {
     server.log.error(err);
   }
