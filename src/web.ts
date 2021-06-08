@@ -1,10 +1,10 @@
 import { FastifyInstance } from "fastify";
 import JSZip from "jszip";
-import fetch from "node-fetch";
+import fetch from "got";
 import { handleImages } from "./images";
 import { FilesAndEdit, copyFiles, copyFile } from "./copy";
 import { webAppManifestSchema } from "./schema";
-import { serviceWorkerId, serviceWorkerService } from "./constants";
+import { DefaultServiceWorkerId, serviceWorkerService } from "./constants";
 
 function schema(server: FastifyInstance) {
   return {
@@ -13,6 +13,7 @@ function schema(server: FastifyInstance) {
       properties: {
         siteUrl: { type: "string" },
         hasServiceWorker: { type: "boolean" },
+        swId: { type: "number" },
       },
     },
     body: webAppManifestSchema(server),
@@ -44,16 +45,19 @@ export default function web(server: FastifyInstance) {
         const swId = (request.query as WebQuery).swId as number;
         const hasServiceWorker = (request.query as WebQuery).hasServiceWorker;
         const manifest = request.body as WebAppManifest;
+
         const results = await Promise.all([
-          ...(await handleImages(server, zip, manifest, siteUrl, "ios")),
+          ...(await handleImages(server, zip, manifest, siteUrl, "pwabuilder")),
           ...copyFiles(zip, manifest, filesAndEdits),
-          ...(await handleServiceWorker(zip, manifest, hasServiceWorker)),
+          ...(await handleServiceWorker(zip, manifest, hasServiceWorker, swId)),
         ]);
 
         const errors = results.filter((result) => !result.success);
         if (errors.length > 0) {
           throw Error(errors.map((result) => result.filePath).toString());
         }
+
+        server.log.info({ results, errors });
 
         // Send Stream
         reply
@@ -63,7 +67,7 @@ export default function web(server: FastifyInstance) {
         server.log.error(err);
 
         reply.status(400).send({
-          message: "failed to create your macos project",
+          message: "failed to create your web project",
           errMessage: err.message,
         });
       }
@@ -95,20 +99,19 @@ const filesAndEdits: FilesAndEdit = {
 async function handleServiceWorker(
   zip: JSZip,
   manifest: WebAppManifest,
-  hasServiceWorker = false
+  hasServiceWorker = false,
+  swId = DefaultServiceWorkerId
 ): Promise<Array<OperationResult>> {
   try {
     const results: Array<OperationResult> = [];
     if (!hasServiceWorker) {
-      const response = await fetch(
-        `${serviceWorkerService}?id=${serviceWorkerId}`,
-        {
-          method: "GET",
-        }
+      const serviceWorker = await fetch.get(
+        `${serviceWorkerService}?id=${swId}`
       );
-      const swZip = await new JSZip().loadAsync(await response.arrayBuffer());
 
+      const swZip = await new JSZip().loadAsync(serviceWorker.rawBody);
       const fileList: Array<string> = [];
+
       swZip.forEach((relPath) => fileList.push(relPath));
 
       for (const filePath of fileList) {
