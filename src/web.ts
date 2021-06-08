@@ -38,7 +38,10 @@ export default function web(server: FastifyInstance) {
     handler: async function (request, reply) {
       try {
         const zip = new JSZip();
-        const siteUrl = (request.query as WebQuery).siteUrl as string;
+        const siteUrl = guardSiteUrl(
+          (request.query as WebQuery).siteUrl as string
+        );
+        const swId = (request.query as WebQuery).swId as number;
         const hasServiceWorker = (request.query as WebQuery).hasServiceWorker;
         const manifest = request.body as WebAppManifest;
         const results = await Promise.all([
@@ -142,4 +145,13 @@ async function handleServiceWorker(
       },
     ];
   }
+}
+
+function guardSiteUrl(siteUrl: string): string {
+  const protocol = "https://";
+  if (!siteUrl.startsWith(protocol)) {
+    return protocol + siteUrl;
+  }
+
+  return siteUrl;
 }
