@@ -4,6 +4,7 @@ import Jimp from "jimp";
 import { FastifyInstance } from "fastify";
 
 import { handleUrl } from "./images";
+import { servicesVersion } from "typescript";
 // import { getGeneratedIconZip } from "./imageGenerator";
 
 /*
@@ -28,6 +29,7 @@ export async function handleIcons(
       return operations;
     }
 
+    // TODO add or remove the generated icons.
     //each image needs to be copied into two places, a manifest changes and also json write changes in the assets folder
     // const largestImgEntry = getLargestImgManifestEntry(manifest);
     // const genIconZip = await getGeneratedIconZip(
@@ -35,8 +37,6 @@ export async function handleIcons(
     //   await getLargestImg(siteUrl, largestImgEntry),
     //   platform
     // ).then((zip) => zip);
-
-    const manifestIcons = await getIconsFromManifest(siteUrl, manifest);
 
     // const genIconsStr = await genIconZip?.file("icons.json")?.async("string");
     // let genIconsList: Array<ManifestImageResource> = [];
@@ -58,53 +58,49 @@ export async function handleIcons(
       4. Edit the manifest entry
       5. Add entry to the Contents.json
      */
-    // for (const iconEntry of genIconsList) {
     const length = manifest.icons.length ?? 0;
     for (let i = 0; i < length; i++) {
       const iconEntry = manifest.icons[i];
-      const iconP = manifestIcons.get(iconEntry.sizes);
+      let iconName = iconEntry.src;
+      let filePath = iconEntry.src;
 
-      if (!iconP) {
-        continue;
-      }
+      try {
+        const url = handleUrl(iconEntry.src, siteUrl);
+        const icon = await Jimp.read(url);
 
-      // if (!manifestIcons) {
-      //   const iconResouceBuffer = (await genIconZip!
-      //     .file(iconEntry.src)
-      //     ?.async("nodebuffer")) as Buffer;
-      //   iconP = Jimp.read(iconResouceBuffer);
-      // }
+        iconName = `${iconEntry.sizes}.` + icon.getExtension();
+        const iconMIME = icon.getMIME();
+        filePath = `images/${iconName}`;
 
-      const icon = await iconP!;
-      const iconName = `${iconEntry.sizes}.` + icon.getExtension();
-      const iconMIME = icon.getMIME();
-      const filePath = `images/${iconName}`;
+        operations.push(
+          (async () => {
+            try {
+              zip.file(filePath, await icon.getBufferAsync(iconMIME));
 
-      operations.push(
-        (async () => {
-          try {
-            zip.file(filePath, await icon.getBufferAsync(iconMIME));
-
-            return {
-              filePath,
-              success: true,
-            };
-          } catch (error) {
+              return {
+                filePath,
+                success: true,
+              };
+            } catch (error) {
+              return {
+                filePath,
+                success: false,
+                error: error as Error,
+              };
+            }
+          })()
+        );
+      } catch (e) {
+        operations.push(
+          (async () => {
             return {
               filePath,
               success: false,
-              error: error as Error,
+              error: e as Error,
             };
-          }
-        })()
-      );
-
-      // manifest.icons.push({
-      //   src: filePath,
-      //   sizes: iconEntry.sizes,
-      //   type: iconMIME,
-      //   purpose: "any",
-      // });
+          })()
+        );
+      }
     }
 
     return operations;
@@ -139,25 +135,6 @@ export function getLargestImg(
 ): Promise<Jimp> {
   const url = handleUrl(manifestEntry.src, baseUrl);
   return Jimp.read(url);
-}
-
-export function getIconsFromManifest(
-  baseUrl: string,
-  manifest: WebAppManifest
-): Map<string, Promise<Jimp>> {
-  const manifestMap: Map<string, Promise<Jimp>> = new Map();
-
-  manifest.icons.forEach((imageInfo) => {
-    const url = handleUrl(imageInfo.src, baseUrl);
-    const jimp = Jimp.read(url);
-    const sizes = imageInfo.sizes.split(" ");
-
-    sizes.forEach((size) => {
-      manifestMap.set(size, jimp);
-    });
-  });
-
-  return manifestMap;
 }
 
 function sizeOf(size: string): number {
