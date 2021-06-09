@@ -4,7 +4,6 @@ import Jimp from "jimp";
 import { FastifyInstance } from "fastify";
 
 import { handleUrl } from "./images";
-import { servicesVersion } from "typescript";
 // import { getGeneratedIconZip } from "./imageGenerator";
 
 /*

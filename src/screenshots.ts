@@ -16,36 +16,54 @@ export async function handleScreenshots(
       return operations;
     }
 
-    const manifestScreenshots = getManifestScreenshots(siteUrl, manifest);
-
     const length = manifest.screenshots.length ?? 0;
     for (let i = 0; i < length; i++) {
       const screenshotEntry = manifest.screenshots[i];
-      const screenshot = await manifestScreenshots[i];
-      const screenshotMIME = screenshot.getMIME();
-      const filePath = `screenshots/${handleScreenshotName(
-        screenshotEntry,
-        i
-      )}`;
+      let filePath = screenshotEntry.src;
 
-      operations.push(
-        (async () => {
-          try {
-            zip.file(filePath, await screenshot.getBufferAsync(screenshotMIME));
+      try {
+        const url = handleUrl(screenshotEntry.src, siteUrl);
+        const screenshot = await Jimp.read(url);
 
-            return {
-              filePath,
-              success: true,
-            };
-          } catch (error) {
+        filePath = `screenshots/${handleScreenshotName(
+          screenshotEntry,
+          screenshot,
+          i
+        )}`;
+        const screenshotMIME = screenshot.getMIME();
+
+        operations.push(
+          (async () => {
+            try {
+              zip.file(
+                filePath,
+                await screenshot.getBufferAsync(screenshotMIME)
+              );
+
+              return {
+                filePath,
+                success: true,
+              };
+            } catch (error) {
+              return {
+                filePath,
+                success: false,
+                error: error as Error,
+              };
+            }
+          })()
+        );
+      } catch (e) {
+        operations.push(
+          (async () => {
             return {
               filePath,
               success: false,
-              error: error as Error,
+              errror: e as Error,
             };
-          }
-        })()
-      );
+          })()
+        );
+      }
     }
 
     return operations;
@@ -55,21 +73,14 @@ export async function handleScreenshots(
   }
 }
 
-function getManifestScreenshots(
-  baseUrl: string,
-  manifest: WebAppManifest
-): Array<Promise<Jimp>> {
-  return manifest.screenshots.map((imageInfo) => {
-    const url = handleUrl(imageInfo.src, baseUrl);
-    return Jimp.read(url);
-  });
-}
-
 function handleScreenshotName(
   screenshot: ManifestImageResource,
+  jimp: Jimp,
   index = 0
 ): string {
-  const generic = `screenshot-${index}-${screenshot.sizes}.png`;
+  const generic = `screenshot-${index}-${
+    screenshot.sizes
+  }.${jimp.getExtension()}`;
 
   if (isBase64(screenshot.src)) {
     return generic;
