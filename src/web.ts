@@ -68,7 +68,7 @@ export default function web(server: FastifyInstance) {
 
         reply.status(400).send({
           message: "failed to create your web project",
-          errMessage: err.message,
+          errMessage: (err as Error).message,
         });
       }
     },
@@ -89,7 +89,7 @@ const filesAndEdits: FilesAndEdit = {
       return {
         filePath,
         success: false,
-        error,
+        error: error as Error,
       };
     }
   },
@@ -139,12 +139,12 @@ async function handleServiceWorker(
       {
         filePath: "serviceWorker.js",
         success: false,
-        error,
+        error: error as Error,
       },
       {
         filePath: "serviceWorker-register.js",
         success: false,
-        error,
+        error: error as Error,
       },
     ];
   }

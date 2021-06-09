@@ -76,7 +76,7 @@ export async function handleImages(
             return {
               filePath,
               success: false,
-              error,
+              error: error as Error,
             };
           }
         })()
