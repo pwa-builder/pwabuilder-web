@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import * as Url from "url";
 import JSZip from "jszip";
 import Jimp from "jimp";
 import { FastifyInstance } from "fastify";
+
+import { handleUrl } from "./images";
 // import { getGeneratedIconZip } from "./imageGenerator";
 
 /*
@@ -63,6 +64,10 @@ export async function handleIcons(
     for (let i = 0; i < length; i++) {
       const iconEntry = manifest.icons[i];
       const iconP = manifestIcons.get(iconEntry.sizes);
+
+      if (!iconP) {
+        continue;
+      }
 
       // if (!manifestIcons) {
       //   const iconResouceBuffer = (await genIconZip!
@@ -133,7 +138,7 @@ export function getLargestImg(
   baseUrl: string,
   manifestEntry: ManifestImageResource
 ): Promise<Jimp> {
-  const url = new Url.URL(manifestEntry.src, baseUrl).toString();
+  const url = handleUrl(manifestEntry.src, baseUrl);
   return Jimp.read(url);
 }
 
@@ -144,7 +149,7 @@ export function getIconsFromManifest(
   const manifestMap: Map<string, Promise<Jimp>> = new Map();
 
   manifest.icons.forEach((imageInfo) => {
-    const url = new Url.URL(imageInfo.src, baseUrl).toString();
+    const url = handleUrl(imageInfo.src, baseUrl);
     const jimp = Jimp.read(url);
     const sizes = imageInfo.sizes.split(" ");
 
