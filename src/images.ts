@@ -24,6 +24,10 @@ export async function handleImages(
   try {
     const operations: Array<Promise<OperationResult>> = [];
 
+    if (!manifest.icons) {
+      return operations;
+    }
+
     //each image needs to be copied into two places, a manifest changes and also json write changes in the assets folder
     // const largestImgEntry = getLargestImgManifestEntry(manifest);
     // const genIconZip = await getGeneratedIconZip(
@@ -55,8 +59,9 @@ export async function handleImages(
       5. Add entry to the Contents.json
      */
     // for (const iconEntry of genIconsList) {
-    for (let i = 0; i < manifest.icons.length; i++) {
-      const iconEntry = manifest.icons[i]
+    const length = manifest.icons.length ?? 0;
+    for (let i = 0; i < length; i++) {
+      const iconEntry = manifest.icons[i];
       const iconP = manifestIcons.get(iconEntry.sizes);
 
       // if (!manifestIcons) {
