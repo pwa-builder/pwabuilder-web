@@ -18,10 +18,9 @@ export async function getGeneratedIconZip(
     form.append("colorOption", "transparent");
     form.append("platform", platform);
 
-    const response = await fetch(
+    const response = await fetch.post(
       "https://appimagegenerator-prod.azurewebsites.net/api/image",
       {
-        method: "POST",
         body: form,
       }
     );
