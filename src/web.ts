@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 import JSZip from "jszip";
 import fetch from "got";
-import { handleImages } from "./images";
+import { handleIcons } from "./icons";
 import { FilesAndEdit, copyFiles, copyFile } from "./copy";
 import { webAppManifestSchema } from "./schema";
 import { DefaultServiceWorkerId, serviceWorkerService } from "./constants";
@@ -47,7 +47,7 @@ export default function web(server: FastifyInstance) {
         const manifest = request.body as WebAppManifest;
 
         const results = await Promise.all([
-          ...(await handleImages(server, zip, manifest, siteUrl, "pwabuilder")),
+          ...(await handleIcons(server, zip, manifest, siteUrl, "pwabuilder")),
           ...copyFiles(zip, manifest, filesAndEdits),
           ...(await handleServiceWorker(zip, manifest, hasServiceWorker, swId)),
         ]);
