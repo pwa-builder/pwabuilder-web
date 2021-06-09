@@ -14,7 +14,7 @@ import { FastifyInstance } from "fastify";
   4. Write the manifest changes.
 
  */
-export async function handleImages(
+export async function handleIcons(
   server: FastifyInstance,
   zip: JSZip,
   manifest: WebAppManifest,
