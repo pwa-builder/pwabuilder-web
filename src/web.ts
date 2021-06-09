@@ -5,6 +5,7 @@ import { handleIcons } from "./icons";
 import { FilesAndEdit, copyFiles, copyFile } from "./copy";
 import { webAppManifestSchema } from "./schema";
 import { DefaultServiceWorkerId, serviceWorkerService } from "./constants";
+import { handleScreenshots } from "./screenshots";
 
 function schema(server: FastifyInstance) {
   return {
@@ -48,6 +49,7 @@ export default function web(server: FastifyInstance) {
 
         const results = await Promise.all([
           ...(await handleIcons(server, zip, manifest, siteUrl)),
+          ...(await handleScreenshots(server, zip, manifest, siteUrl)),
           ...copyFiles(zip, manifest, filesAndEdits),
           ...(await handleServiceWorker(zip, manifest, hasServiceWorker, swId)),
         ]);

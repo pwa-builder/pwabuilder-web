@@ -4,7 +4,7 @@ import { FastifyInstance } from "fastify";
 
 import { handleUrl, isBase64 } from "./images";
 
-export async function handleIcons(
+export async function handleScreenshots(
   server: FastifyInstance,
   zip: JSZip,
   manifest: WebAppManifest,
