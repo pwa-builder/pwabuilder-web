@@ -90,12 +90,12 @@ export async function handleImages(
         })()
       );
 
-      manifest.icons.push({
-        src: filePath,
-        sizes: iconEntry.sizes,
-        type: iconMIME,
-        purpose: "any",
-      });
+      // manifest.icons.push({
+      //   src: filePath,
+      //   sizes: iconEntry.sizes,
+      //   type: iconMIME,
+      //   purpose: "any",
+      // });
     }
 
     return operations;
