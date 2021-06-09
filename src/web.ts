@@ -47,7 +47,7 @@ export default function web(server: FastifyInstance) {
         const manifest = request.body as WebAppManifest;
 
         const results = await Promise.all([
-          ...(await handleIcons(server, zip, manifest, siteUrl, "pwabuilder")),
+          ...(await handleIcons(server, zip, manifest, siteUrl)),
           ...copyFiles(zip, manifest, filesAndEdits),
           ...(await handleServiceWorker(zip, manifest, hasServiceWorker, swId)),
         ]);

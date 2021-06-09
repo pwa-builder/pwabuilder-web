@@ -2,8 +2,8 @@
 import * as Url from "url";
 import JSZip from "jszip";
 import Jimp from "jimp";
-import { getGeneratedIconZip } from "./imageGenerator";
 import { FastifyInstance } from "fastify";
+// import { getGeneratedIconZip } from "./imageGenerator";
 
 /*
   Handle Images
@@ -18,8 +18,8 @@ export async function handleIcons(
   server: FastifyInstance,
   zip: JSZip,
   manifest: WebAppManifest,
-  siteUrl: string,
-  platform: string
+  siteUrl: string
+  // platform: string
 ): Promise<Array<Promise<OperationResult>>> {
   try {
     const operations: Array<Promise<OperationResult>> = [];
