@@ -61,14 +61,13 @@ export async function handleIcons(
     const length = manifest.icons.length ?? 0;
     for (let i = 0; i < length; i++) {
       const iconEntry = manifest.icons[i];
-      let iconName = iconEntry.src;
       let filePath = iconEntry.src;
 
       try {
         const url = handleUrl(iconEntry.src, siteUrl);
         const icon = await Jimp.read(url);
 
-        iconName = `${iconEntry.sizes}.` + icon.getExtension();
+        const iconName = `${iconEntry.sizes}.` + icon.getExtension();
         const iconMIME = icon.getMIME();
         filePath = `images/${iconName}`;
 
