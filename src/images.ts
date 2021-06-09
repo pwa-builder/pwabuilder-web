@@ -25,21 +25,27 @@ export async function handleImages(
     const operations: Array<Promise<OperationResult>> = [];
 
     //each image needs to be copied into two places, a manifest changes and also json write changes in the assets folder
-    const largestImgEntry = getLargestImgManifestEntry(manifest);
-    const genIconZip = await getGeneratedIconZip(
-      server,
-      await getLargestImg(siteUrl, largestImgEntry),
-      platform
-    ).then((zip) => zip);
+    // const largestImgEntry = getLargestImgManifestEntry(manifest);
+    // const genIconZip = await getGeneratedIconZip(
+    //   server,
+    //   await getLargestImg(siteUrl, largestImgEntry),
+    //   platform
+    // ).then((zip) => zip);
+
     const manifestIcons = await getIconsFromManifest(siteUrl, manifest);
-    const genIconsStr = await genIconZip?.file("icons.json")?.async("string");
-    let genIconsList: Array<ManifestImageResource> = [];
 
-    if (genIconsStr) {
-      genIconsList = JSON.parse(genIconsStr)["icons"];
-    }
+    // const genIconsStr = await genIconZip?.file("icons.json")?.async("string");
+    // let genIconsList: Array<ManifestImageResource> = [];
 
-    manifest.icons = [];
+    // if (genIconsStr) {
+    //   genIconsList = JSON.parse(genIconsStr)["icons"];
+
+    //   server.log.info(
+    //     "handleImages(): genIconsList = " + JSON.stringify(genIconsList)
+    //   );
+    // }
+
+    // manifest.icons = [];
 
     /*
       1. Attempt to grab icon from manifest
@@ -48,15 +54,17 @@ export async function handleImages(
       4. Edit the manifest entry
       5. Add entry to the Contents.json
      */
-    for (const iconEntry of genIconsList) {
-      let iconP = manifestIcons.get(iconEntry.sizes);
+    // for (const iconEntry of genIconsList) {
+    for (let i = 0; i < manifest.icons.length; i++) {
+      const iconEntry = manifest.icons[i]
+      const iconP = manifestIcons.get(iconEntry.sizes);
 
-      if (!manifestIcons) {
-        const iconResouceBuffer = (await genIconZip!
-          .file(iconEntry.src)
-          ?.async("nodebuffer")) as Buffer;
-        iconP = Jimp.read(iconResouceBuffer);
-      }
+      // if (!manifestIcons) {
+      //   const iconResouceBuffer = (await genIconZip!
+      //     .file(iconEntry.src)
+      //     ?.async("nodebuffer")) as Buffer;
+      //   iconP = Jimp.read(iconResouceBuffer);
+      // }
 
       const icon = await iconP!;
       const iconName = `${iconEntry.sizes}.` + icon.getExtension();
