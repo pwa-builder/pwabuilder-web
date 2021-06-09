@@ -10,9 +10,8 @@ export async function handleScreenshots(
   manifest: WebAppManifest,
   siteUrl: string
 ): Promise<Array<Promise<OperationResult>>> {
+  const operations: Array<Promise<OperationResult>> = [];
   try {
-    const operations: Array<Promise<OperationResult>> = [];
-
     if (!manifest.screenshots) {
       return operations;
     }
@@ -52,7 +51,7 @@ export async function handleScreenshots(
     return operations;
   } catch (e) {
     server.log.error(e);
-    return [];
+    return operations;
   }
 }
 

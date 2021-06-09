@@ -22,9 +22,8 @@ export async function handleIcons(
   siteUrl: string
   // platform: string
 ): Promise<Array<Promise<OperationResult>>> {
+  const operations: Array<Promise<OperationResult>> = [];
   try {
-    const operations: Array<Promise<OperationResult>> = [];
-
     if (!manifest.icons) {
       return operations;
     }
@@ -111,7 +110,7 @@ export async function handleIcons(
     return operations;
   } catch (error) {
     server.log.error(error);
-    return [];
+    return operations;
   }
 }
 
