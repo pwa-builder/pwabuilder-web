@@ -79,7 +79,7 @@ export default function web(server: FastifyInstance) {
 
 // Object that holds the files and edit functions to those files.
 const filesAndEdits: FilesAndEdit = {
-  "web/next-steps.md": copyFile,
+  "web/next-steps.html": copyFile,
   "manifest.json": async (zip, manifest, filePath) => {
     try {
       zip.file(filePath, JSON.stringify(manifest, undefined, 2));
