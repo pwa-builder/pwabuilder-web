@@ -1,7 +1,7 @@
 import JSZip from "jszip";
 import Jimp from "jimp";
 import FormData from "form-data";
-import fetch from "node-fetch";
+import fetch from "got";
 import { FastifyInstance } from "fastify";
 
 export async function getGeneratedIconZip(
@@ -18,15 +18,14 @@ export async function getGeneratedIconZip(
     form.append("colorOption", "transparent");
     form.append("platform", platform);
 
-    const response = await fetch(
+    const response = await fetch.post(
       "https://appimagegenerator-prod.azurewebsites.net/api/image",
       {
-        method: "POST",
         body: form,
       }
     );
 
-    return JSZip.loadAsync(await response.buffer());
+    return JSZip.loadAsync(response.read());
   } catch (err) {
     server.log.error(err);
   }

@@ -56,7 +56,7 @@ export async function copyFile(
     return {
       filePath,
       success: false,
-      error,
+      error: error as Error,
     };
   }
 }
@@ -83,7 +83,7 @@ export function copyAndEditFile(editCb: EditCallback): CopyAndEditFunction {
       return {
         filePath,
         success: false,
-        error,
+        error: error as Error,
       };
     }
   };
@@ -104,7 +104,7 @@ export async function getFileBufferAndEdit(
 
     return Buffer.from(str);
   } catch (error) {
-    return error;
+    return error as Error;
   }
 }
 
@@ -137,7 +137,7 @@ export async function copyFolder(
     return {
       filePath: relativePath,
       success: false,
-      error,
+      error: error as Error,
     };
   }
 }
