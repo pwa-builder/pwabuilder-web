@@ -6,6 +6,7 @@ import { FilesAndEdit, copyFiles, copyFile } from "./copy";
 import { webAppManifestSchema } from "./schema";
 import { DefaultServiceWorkerId, serviceWorkerService } from "./constants";
 import { handleScreenshots } from "./screenshots";
+import { writeFile } from "./write";
 
 function schema(server: FastifyInstance) {
   return {
@@ -55,11 +56,16 @@ export default function web(server: FastifyInstance) {
         ]);
 
         const errors = results.filter((result) => !result.success);
-        if (errors.length > 0) {
-          throw Error(errors.map((result) => result.filePath).toString());
-        }
-
         server.log.info({ results, errors });
+
+        if (errors.length > 0) {
+          // throw Error(errors.map((result) => result.filePath).toString());
+          await writeFile(
+            zip,
+            JSON.stringify({ results, errors }),
+            "results.json"
+          );
+        }
 
         // Send Stream
         reply
