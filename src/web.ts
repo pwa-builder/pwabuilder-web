@@ -4,7 +4,7 @@ import fetch from "got";
 import { handleIcons } from "./icons";
 import { FilesAndEdit, copyFiles, copyFile } from "./copy";
 import { webAppManifestSchema } from "./schema";
-import { DefaultServiceWorkerId, serviceWorkerService } from "./constants";
+import { BinaryMegabyteSize, DefaultServiceWorkerId, serviceWorkerService } from "./constants";
 import { handleScreenshots } from "./screenshots";
 import { writeFile } from "./write";
 
@@ -38,6 +38,7 @@ export default function web(server: FastifyInstance) {
     method: "POST",
     url: "/",
     schema: schema(server),
+    bodyLimit: 24 * BinaryMegabyteSize,
     handler: async function (request, reply) {
       try {
         const zip = new JSZip();
