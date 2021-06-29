@@ -37,11 +37,13 @@
   "dependencies": {
     "@jimp/jpeg": "^0.16.1",
     "@jimp/png": "^0.16.1",
+    "@types/busboy": "^0.2.3",
     "@types/klaw": "^3.0.1",
     "@types/node": "^14.14.6",
     "@types/node-fetch": "^2.5.10",
     "dotenv": "^8.2.0",
     "fastify": "^3.17.0",
+    "fastify-multipart": "^4.0.6",
     "form-data": "^3.0.0",
     "got": "^11.8.2",
     "jimp": "^0.16.1",
