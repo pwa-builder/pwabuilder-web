@@ -1,9 +1,10 @@
-import dotenv from "dotenv";
-import fastify from "fastify";
-import web from "./web";
+import dotenv from 'dotenv';
+import fastify from 'fastify';
+import plugins from './plugins';
+import web from './web';
 
 const port = process.env.PORT || 3000;
-const address = process.env.HOST || "0.0.0.0";
+const address = process.env.HOST || '0.0.0.0';
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ const server = fastify({
   trustProxy: true,
 });
 
+plugins(server);
 web(server);
 
 const start = async () => {
