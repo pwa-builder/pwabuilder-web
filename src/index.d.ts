@@ -55,5 +55,5 @@ interface WebQuery {
 // form data is represents objects as text versions of the objects, the only exception to this is the arrays which can contain strings or arrays.
 interface BusBoyItem {
   fieldname: string;
-  value: string | Array<string>;
+  value: string;
 }
