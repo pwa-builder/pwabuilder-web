@@ -11,6 +11,7 @@ import {
 } from './constants';
 import { handleScreenshots } from './screenshots';
 import { writeFile } from './write';
+import { generateObjectFromFormData } from './utils';
 
 function schema(server: FastifyInstance) {
   return {
@@ -111,14 +112,10 @@ export default function web(server: FastifyInstance) {
             });
           }
 
-          const manifest: WebAppManifest = {} as WebAppManifest;
-
-          for await (const file of request.files()) {
-            server.log.info(file);
-            server.log.info(file.filename);
-            server.log.info(file.filepath);
-            server.log.info(file.fieldname);
-          }
+          const manifest = generateObjectFromFormData<WebAppManifest>(
+            request.body,
+            server
+          );
 
           const results = await Promise.all([
             ...(await handleIcons(server, zip, manifest, siteUrl)),
