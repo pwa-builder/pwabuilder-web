@@ -29,6 +29,8 @@ export function generateObjectFromFormData<T>(
         manifest[key] = formField.value;
       }
     }
+
+    server?.log.info(manifest[key]);
   }
 
   return manifest;
@@ -37,7 +39,7 @@ export function generateObjectFromFormData<T>(
 function parseValues(field: string): any {
   const trimmed = field.trim();
   if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
-    return JSON.stringify(field);
+    return JSON.parse(field);
   } else {
     return field;
   }

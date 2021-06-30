@@ -117,6 +117,8 @@ export default function web(server: FastifyInstance) {
             server
           );
 
+          server.log.info(manifest);
+
           const results = await Promise.all([
             ...(await handleIcons(server, zip, manifest, siteUrl)),
             ...(await handleScreenshots(server, zip, manifest, siteUrl)),
