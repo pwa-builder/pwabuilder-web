@@ -1,8 +1,8 @@
-import JSZip from "jszip";
-import Jimp from "jimp";
-import { FastifyInstance } from "fastify";
+import JSZip from 'jszip';
+import Jimp from 'jimp';
+import { FastifyInstance } from 'fastify';
 
-import { handleUrl, isBase64 } from "./images";
+import { getJimp, isBase64 } from './images';
 
 export async function handleScreenshots(
   server: FastifyInstance,
@@ -22,8 +22,14 @@ export async function handleScreenshots(
       let filePath = screenshotEntry.src;
 
       try {
-        const url = handleUrl(screenshotEntry.src, siteUrl);
-        const screenshot = await Jimp.read(url);
+        const screenshot = await getJimp(screenshotEntry, siteUrl);
+
+        if (!screenshot) {
+          server.log.error(
+            "the service wasn't able to generate the screenshot"
+          );
+          continue;
+        }
 
         filePath = `screenshots/${handleScreenshotName(
           screenshotEntry,
@@ -39,6 +45,7 @@ export async function handleScreenshots(
                 filePath,
                 await screenshot.getBufferAsync(screenshotMIME)
               );
+              manifest.screenshots[i].src = filePath;
 
               return {
                 filePath,
@@ -85,6 +92,6 @@ function handleScreenshotName(
   if (isBase64(screenshot.src)) {
     return generic;
   } else {
-    return screenshot.src.split("/").pop() ?? generic;
+    return screenshot.src.split('/').pop() ?? generic;
   }
 }

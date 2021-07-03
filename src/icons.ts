@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import JSZip from "jszip";
-import Jimp from "jimp";
-import { FastifyInstance } from "fastify";
+import JSZip from 'jszip';
+import Jimp from 'jimp';
+import { FastifyInstance } from 'fastify';
 
-import { handleUrl } from "./images";
+import { getJimp, handleUrl } from './images';
 // import { getGeneratedIconZip } from "./imageGenerator";
 
 /*
@@ -63,8 +63,12 @@ export async function handleIcons(
       let filePath = iconEntry.src;
 
       try {
-        const url = handleUrl(iconEntry.src, siteUrl);
-        const icon = await Jimp.read(url);
+        const icon = await getJimp(iconEntry, siteUrl);
+
+        if (!icon) {
+          server.log.error("the service wasn't able to generate the icon");
+          continue;
+        }
 
         const iconName = `${iconEntry.sizes}.` + icon.getExtension();
         const iconMIME = icon.getMIME();
@@ -74,6 +78,7 @@ export async function handleIcons(
           (async () => {
             try {
               zip.file(filePath, await icon.getBufferAsync(iconMIME));
+              manifest.icons[i].src = filePath;
 
               return {
                 filePath,
@@ -115,7 +120,7 @@ export function getLargestImgManifestEntry(
   let largestSize = 0;
 
   manifest.icons.forEach((icon, index) => {
-    icon.sizes.split(" ").forEach((size) => {
+    icon.sizes.split(' ').forEach(size => {
       const currentSize = sizeOf(size);
       if (currentSize > largestSize) {
         largestIndex = index;
@@ -136,5 +141,5 @@ export function getLargestImg(
 }
 
 function sizeOf(size: string): number {
-  return Number(size.split("x")[0]);
+  return Number(size.split('x')[0]);
 }
