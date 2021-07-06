@@ -72,12 +72,21 @@ export async function handleIcons(
 
         const iconName = `${iconEntry.sizes}.` + icon.getExtension();
         const iconMIME = icon.getMIME();
+        const width = icon.bitmap.width;
+        const height = icon.bitmap.height;
+
         filePath = `images/${iconName}`;
 
         operations.push(
           (async () => {
             try {
-              zip.file(filePath, await icon.getBufferAsync(iconMIME));
+              zip.file(
+                filePath,
+                await icon
+                  .quality(100)
+                  .resize(width, height)
+                  .getBufferAsync(iconMIME)
+              );
               manifest.icons[i].src = filePath;
 
               return {

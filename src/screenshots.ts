@@ -30,6 +30,8 @@ export async function handleScreenshots(
           );
           continue;
         }
+        const width = screenshot.bitmap.width;
+        const height = screenshot.bitmap.height;
 
         filePath = `screenshots/${handleScreenshotName(
           screenshotEntry,
@@ -43,7 +45,10 @@ export async function handleScreenshots(
             try {
               zip.file(
                 filePath,
-                await screenshot.getBufferAsync(screenshotMIME)
+                await screenshot
+                  .quality(100)
+                  .resize(width, height)
+                  .getBufferAsync(screenshotMIME)
               );
               manifest.screenshots[i].src = filePath;
 
