@@ -194,7 +194,7 @@ async function handleServiceWorker(
         `${serviceWorkerService}?id=${swId}`,
         {
           headers: {
-            accept: 'application/json, application/zip',
+            accept: 'application/zip',
           },
         }
       );
