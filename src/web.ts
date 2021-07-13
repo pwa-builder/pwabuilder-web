@@ -188,9 +188,15 @@ async function handleServiceWorker(
 ): Promise<Array<OperationResult>> {
   try {
     const results: Array<OperationResult> = [];
+
     if (!hasServiceWorker) {
       const serviceWorker = await fetch.get(
-        `${serviceWorkerService}?id=${swId}`
+        `${serviceWorkerService}?id=${swId}`,
+        {
+          headers: {
+            accept: 'application/zip',
+          },
+        }
       );
 
       const swZip = await new JSZip().loadAsync(serviceWorker.rawBody);
@@ -218,17 +224,19 @@ async function handleServiceWorker(
     }
 
     return results;
-  } catch (error) {
+  } catch (err) {
+    const error = err as Error;
+
     return [
       {
         filePath: 'serviceWorker.js',
         success: false,
-        error: error as Error,
+        error,
       },
       {
         filePath: 'serviceWorker-register.js',
         success: false,
-        error: error as Error,
+        error,
       },
     ];
   }
