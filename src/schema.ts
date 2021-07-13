@@ -1,70 +1,81 @@
-import { FastifyInstance } from "fastify";
+import { FastifyInstance } from 'fastify';
+
+export function queryStringSchema() {
+  return {
+    type: 'object',
+    properties: {
+      siteUrl: { type: 'string' },
+      hasServiceWorker: { type: 'boolean' },
+      swId: { type: 'number' },
+    },
+  };
+}
 
 function imageResourceSchema() {
   return {
-    $id: "imageResource",
-    required: ["src"],
+    $id: 'imageResource',
+    required: ['src'],
     properties: {
-      src: { type: "string" },
-      sizes: { type: "string" },
-      type: { type: "string" },
-      purpose: { type: "string" },
+      src: { type: 'string' },
+      sizes: { type: 'string' },
+      type: { type: 'string' },
+      purpose: { type: 'string' },
     },
   };
 }
 
 function webAppSchema() {
   return {
-    $id: "webApp",
-    type: "object",
-    required: ["name"],
+    $id: 'webApp',
+    type: 'object',
+    required: ['name'],
     properties: {
-      dir: { type: "string" },
-      lang: { type: "string" },
-      name: { type: "string" },
-      short_name: { type: "string" },
-      description: { type: "string" },
+      dir: { type: 'string' },
+      lang: { type: 'string' },
+      name: { type: 'string' },
+      short_name: { type: 'string' },
+      description: { type: 'string' },
       icons: {
-        type: "array",
+        type: 'array',
         items: {
-          $ref: "imageResource#",
+          $ref: 'imageResource#',
         },
       },
       screenshots: {
-        type: "array",
+        type: 'array',
         items: {
-          $ref: "imageResource#",
+          $ref: 'imageResource#',
         },
       },
       categories: {
-        type: "array",
+        type: 'array',
         items: {
-          type: "string",
+          type: 'string',
         },
       },
       iarc_rating_id: {
-        type: "string",
+        type: 'string',
       },
       start_url: {
-        type: "string",
+        type: 'string',
       },
       display: {
-        type: "string",
+        type: 'string',
       },
       orientation: {
-        type: "string",
+        type: 'string',
       },
       theme_color: {
-        type: "string",
+        type: 'string',
       },
       background_color: {
-        type: "string",
+        type: 'string',
       },
       scope: {
-        type: "string",
+        type: 'string',
       },
       prefer_related_applications: {
-        type: "string",
+        type: 'string',
       },
     },
   };
@@ -76,6 +87,6 @@ export function webAppManifestSchema(server: FastifyInstance) {
   server.addSchema(webAppSchema());
 
   return {
-    $ref: "webApp#",
+    $ref: 'webApp#',
   };
 }
