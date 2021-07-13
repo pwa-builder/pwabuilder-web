@@ -40,7 +40,7 @@ In the `<head>` section of your HTML, add the following code:
 
 ## 5. Add a service worker registration snippet to your HTML
 
-Now that you've uplaoded your service worker file, your HTML page should register your service worker.
+Now that you've uploaded your service worker file, your HTML page should register your service worker.
 
 In the `<head>` section of your HTML, add the following code:
 
