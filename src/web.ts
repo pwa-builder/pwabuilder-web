@@ -3,7 +3,7 @@ import JSZip from 'jszip';
 import fetch from 'got';
 import { handleIcons } from './icons';
 import { FilesAndEdit, copyFiles, copyFile } from './copy';
-import { webAppManifestSchema } from './schema';
+import { queryStringSchema, webAppManifestSchema } from './schema';
 import {
   BinaryMegabyteSize,
   DefaultServiceWorkerId,
@@ -15,14 +15,7 @@ import { generateObjectFromFormData } from './utils';
 
 function schema(server: FastifyInstance) {
   return {
-    querystring: {
-      type: 'object',
-      properties: {
-        siteUrl: { type: 'string' },
-        hasServiceWorker: { type: 'boolean' },
-        swId: { type: 'number' },
-      },
-    },
+    querystring: queryStringSchema(),
     body: webAppManifestSchema(server),
     response: {
       // 200 response is file a so no json schema
@@ -97,6 +90,9 @@ export default function web(server: FastifyInstance) {
       method: 'POST',
       url: '/form',
       bodyLimit: 1024 * BinaryMegabyteSize,
+      schema: {
+        querystring: queryStringSchema(),
+      },
       handler: async function (request, reply) {
         try {
           const zip = new JSZip();
@@ -116,8 +112,6 @@ export default function web(server: FastifyInstance) {
             request.body,
             server
           );
-
-          server.log.info(manifest);
 
           const results = await Promise.all([
             ...(await handleIcons(server, zip, manifest, siteUrl)),
