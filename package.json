@@ -50,23 +50,30 @@
     "jszip": "^3.5.0",
     "klaw": "^3.0.0",
     "node-fetch": "^2.6.1",
+    "rimraf": "^3.0.2",
     "typedoc": "^0.19.2"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.24",
     "@typescript-eslint/eslint-plugin": "^4.8.2",
     "@typescript-eslint/parser": "^4.8.2",
     "danger": "^10.5.3",
     "eslint": "^7.14.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.3.6",
     "eslint-plugin-node": "^11.1.0",
     "fastify-cli": "^2.13.0",
+    "jest": "^27.0.6",
+    "ts-jest": "^27.0.3",
+    "ts-node": "^10.1.0",
     "tslib": "^2.0.3",
     "typescript": "^4.0.7"
   },
   "scripts": {
     "pretest": "eslint src",
-    "build": "tsc",
+    "test": "npm run build && jest --coverage",
+    "build": "rimraf build/ && tsc",
     "start": "node build/server.js",
     "fastify": "fastify start build/web.js",
     "typedoc": "typedoc --out docs src"
