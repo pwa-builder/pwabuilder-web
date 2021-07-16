@@ -28,7 +28,7 @@ const mockManifest: WebAppManifest = {
   prefer_related_applications: 'true',
 };
 
-describe('screenshots', () => {
+describe('screenshots.ts', () => {
   it('handleScreenshots() screenshots', () => {
     const server = fastify();
     const zip = new JSZip();
