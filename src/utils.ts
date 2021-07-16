@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 
-export function generateObjectFromFormData<T>(
-  busboyBody: any,
+export function generateObjectFromFormData(
+  busboyBody: WebAppManifest,
   server?: FastifyInstance
 ): WebAppManifest {
   server?.log.info(busboyBody);
