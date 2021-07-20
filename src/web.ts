@@ -108,8 +108,8 @@ export default function web(server: FastifyInstance) {
             });
           }
 
-          const manifest = generateObjectFromFormData<WebAppManifest>(
-            request.body,
+          const manifest = generateObjectFromFormData(
+            request.body as WebAppManifest,
             server
           );
 
