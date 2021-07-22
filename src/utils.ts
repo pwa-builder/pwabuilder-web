@@ -16,15 +16,32 @@ export function generateObjectFromFormData(
 
     server?.log.info(key);
 
+    // handle arrays of 2+ elements.
     if (Array.isArray(formField)) {
       manifest[key] = (formField as Array<BusBoyItem>).map(item =>
         parseValues(item.value)
       );
+      // need behavior to handle single elements of array elements.
+    } else if (
+      key === 'icons' ||
+      key === 'screenshots' ||
+      key === 'shortcuts'
+    ) {
+      manifest[key] = [JSON.parse(formField.value)];
+      //single elements of the categories array
+    } else if (key === 'categories') {
+      manifest[key] = [formField.value];
     } else {
-      server?.log.info((formField as BusBoyItem).value);
-
       if ((<string>formField.value).startsWith('{')) {
-        manifest[key] = JSON.stringify(formField.value);
+        manifest[key] = parseValues(formField.value);
+      } else if (formField.value === 'true') {
+        // support for true and false
+        manifest[key] = true;
+      } else if (formField.value === 'false') {
+        manifest[key] = false;
+      } else if (parseInt(formField.value)) {
+        // check if number, then use number to handle floats
+        manifest[key] = Number(formField.value);
       } else {
         manifest[key] = formField.value;
       }
