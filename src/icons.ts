@@ -80,6 +80,7 @@ export async function handleIcons(
         operations.push(
           (async () => {
             try {
+              manifest.icons[i].src = filePath;
               zip.file(
                 filePath,
                 await icon
@@ -87,7 +88,6 @@ export async function handleIcons(
                   .resize(width, height)
                   .getBufferAsync(iconMIME)
               );
-              manifest.icons[i].src = filePath;
 
               return {
                 filePath,
