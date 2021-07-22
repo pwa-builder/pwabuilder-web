@@ -30,7 +30,7 @@ interface WebAppManifest {
   background_color: string;
   scope: string;
   related_applications?: Array<Unsupported>;
-  prefer_related_applications: 'true' | 'false';
+  prefer_related_applications: boolean;
   shortcuts?: Array<Unsupported>;
 
   [key: string]: any;
@@ -57,3 +57,28 @@ interface BusBoyItem {
   fieldname: string;
   value: string;
 }
+
+interface BusBoyWebAppManifestLike {
+  dir: BusBoyItem;
+  lang: BusBoyItem;
+  name: BusBoyItem;
+  short_name: BusBoyItem;
+  description: BusBoyItem;
+  icons: Array<BusBoyItem> | BusBoyItem;
+  screenshots: Array<BusBoyItem> | BusBoyItem;
+  categories: Array<BusBoyItem> | BusBoyItem;
+  iarc_rating_id: BusBoyItem;
+  start_url: BusBoyItem;
+  display: BusBoyItem;
+  orientation: BusBoyItem;
+  theme_color: BusBoyItem;
+  background_color: BusBoyItem;
+  scope: BusBoyItem;
+  related_applications?: Array<BusBoyItem> | BusBoyItem;
+  prefer_related_applications: BusBoyItem;
+  shortcuts?: Array<BusBoyItem> | BusBoyItem;
+
+  [key: string]: any;
+}
+
+type BusBoyGestalt = WebAppManifest | BusBoyWebAppManifestLike;

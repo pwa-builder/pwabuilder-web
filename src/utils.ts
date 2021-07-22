@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 
 export function generateObjectFromFormData(
-  busboyBody: WebAppManifest,
+  busboyBody: BusBoyGestalt,
   server?: FastifyInstance
 ): WebAppManifest {
   server?.log.info(busboyBody);
@@ -11,7 +11,7 @@ export function generateObjectFromFormData(
   const length = keys.length;
   for (let index = 0; index < length; index++) {
     // the fastify-multipart mapper adds the buffer fields as strings, or arrays of strings for our usage.
-    const key = keys[index] as keyof WebAppManifest;
+    const key = keys[index] as keyof BusBoyGestalt;
     const formField = busboyBody[key] as BusBoyItem | Array<BusBoyItem>;
 
     server?.log.info(key);
