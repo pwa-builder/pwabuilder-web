@@ -43,6 +43,7 @@ export async function handleScreenshots(
         operations.push(
           (async () => {
             try {
+              manifest.screenshots[i].src = filePath;
               zip.file(
                 filePath,
                 await screenshot
@@ -50,7 +51,6 @@ export async function handleScreenshots(
                   .resize(width, height)
                   .getBufferAsync(screenshotMIME)
               );
-              manifest.screenshots[i].src = filePath;
 
               return {
                 filePath,
