@@ -46,12 +46,13 @@ export async function handleScreenshots(
           screenshot,
           i
         )}`;
+        manifest.screenshots[i].src = filePath;
+
         const screenshotMIME = screenshot.getMIME();
 
         operations.push(
           (async () => {
             try {
-              manifest.screenshots[i].src = filePath;
               zip.file(
                 filePath,
                 await screenshot

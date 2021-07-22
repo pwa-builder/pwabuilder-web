@@ -62,11 +62,11 @@ export async function handleIcons(
         const height = icon.bitmap.height;
 
         filePath = `images/${iconName}`;
+        manifest.icons[i].src = filePath;
 
         operations.push(
           (async () => {
             try {
-              manifest.icons[i].src = filePath;
               zip.file(
                 filePath,
                 await icon
