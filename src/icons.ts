@@ -28,28 +28,6 @@ export async function handleIcons(
       return operations;
     }
 
-    // TODO add or remove the generated icons.
-    //each image needs to be copied into two places, a manifest changes and also json write changes in the assets folder
-    // const largestImgEntry = getLargestImgManifestEntry(manifest);
-    // const genIconZip = await getGeneratedIconZip(
-    //   server,
-    //   await getLargestImg(siteUrl, largestImgEntry),
-    //   platform
-    // ).then((zip) => zip);
-
-    // const genIconsStr = await genIconZip?.file("icons.json")?.async("string");
-    // let genIconsList: Array<ManifestImageResource> = [];
-
-    // if (genIconsStr) {
-    //   genIconsList = JSON.parse(genIconsStr)["icons"];
-
-    //   server.log.info(
-    //     "handleImages(): genIconsList = " + JSON.stringify(genIconsList)
-    //   );
-    // }
-
-    // manifest.icons = [];
-
     /*
       1. Attempt to grab icon from manifest
       2. If that fails grab it from the generated icon list
@@ -67,6 +45,14 @@ export async function handleIcons(
 
         if (!icon) {
           server.log.error("the service wasn't able to generate the icon");
+          operations.push(
+            (async () => {
+              return {
+                filePath,
+                success: false,
+              };
+            })()
+          );
           continue;
         }
 

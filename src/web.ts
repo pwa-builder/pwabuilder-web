@@ -129,7 +129,6 @@ export default function web(server: FastifyInstance) {
           server.log.info({ results, errors });
 
           if (errors.length > 0) {
-            // throw Error(errors.map((result) => result.filePath).toString());
             await writeFile(
               zip,
               JSON.stringify({ results, errors }),

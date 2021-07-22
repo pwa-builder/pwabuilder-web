@@ -29,7 +29,8 @@ export async function getJimp(
 
     return Jimp.read(url);
   } catch (e) {
-    server?.log.info(e);
+    server?.log.error(e);
+    server?.log.trace((e as Error).stack);
   }
 
   return undefined;
