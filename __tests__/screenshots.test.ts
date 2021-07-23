@@ -25,7 +25,7 @@ const mockManifest: WebAppManifest = {
   screenshots: [],
   categories: [],
   iarc_rating_id: 'ignore',
-  prefer_related_applications: 'true',
+  prefer_related_applications: true,
 };
 
 describe('screenshots.ts', () => {
