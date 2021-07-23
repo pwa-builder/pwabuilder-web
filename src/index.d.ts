@@ -81,4 +81,4 @@ interface BusBoyWebAppManifestLike {
   [key: string]: any;
 }
 
-type BusBoyGestalt = WebAppManifest | BusBoyWebAppManifestLike;
+type WebAppManifestGestalt = WebAppManifest | BusBoyWebAppManifestLike;

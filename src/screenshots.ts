@@ -28,6 +28,14 @@ export async function handleScreenshots(
           server.log.error(
             "the service wasn't able to generate the screenshot"
           );
+          operations.push(
+            (async () => {
+              return {
+                filePath,
+                success: false,
+              };
+            })()
+          );
           continue;
         }
         const width = screenshot.bitmap.width;
@@ -38,12 +46,13 @@ export async function handleScreenshots(
           screenshot,
           i
         )}`;
+        manifest.screenshots[i].src = filePath;
+
         const screenshotMIME = screenshot.getMIME();
 
         operations.push(
           (async () => {
             try {
-              manifest.screenshots[i].src = filePath;
               zip.file(
                 filePath,
                 await screenshot
@@ -71,7 +80,7 @@ export async function handleScreenshots(
             return {
               filePath,
               success: false,
-              errror: e as Error,
+              error: e as Error,
             };
           })()
         );
