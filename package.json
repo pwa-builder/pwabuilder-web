@@ -1,6 +1,6 @@
 {
   "name": "pwabuilder-web",
-  "version": "2.0.0-rc.2",
+  "version": "2.0.0-rc.5",
   "description": "PWA Builder Web Platform",
   "repository": {
     "type": "git",
@@ -33,8 +33,8 @@
     "Windows"
   ],
   "dependencies": {
-    "q": "^1.4.1",
-    "pwabuilder-lib": "^2.0.0-rc.1"
+    "pwabuilder-lib": "^2.0.4-RC.2",
+    "q": "^1.4.1"
   },
   "devDependencies": {
     "blanket": "1.1.6",
