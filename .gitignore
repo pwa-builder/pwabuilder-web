@@ -1,3 +1,8 @@
+build/
+coverage/
+
+.DS_Store
+
 # Logs
 logs
 *.log
